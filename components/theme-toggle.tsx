@@ -1,8 +1,8 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 export function ThemeToggle() {
 	const { setTheme, theme } = useTheme();
 

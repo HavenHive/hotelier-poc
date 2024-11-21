@@ -1,3 +1,4 @@
+import { Profile } from "@/components/account/profile";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -6,7 +7,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Profile } from "@/components/account/profile";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

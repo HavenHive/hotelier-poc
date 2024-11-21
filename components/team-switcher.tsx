@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronsUpDown, Plus, UserRound } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
 	DropdownMenu,
@@ -18,16 +18,16 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
+import { useToast } from "@/hooks/use-toast";
 import {
+	organization,
 	useActiveOrganization,
 	useListOrganizations,
-	organization,
 } from "@/lib/auth.client";
-import Image from "next/image";
-import { CreateOrg } from "./create-org";
-import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
 import { useAccountStore } from "@/lib/store";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { CreateOrg } from "./create-org";
 
 export function TeamSwitcher() {
 	const { toggle, isPersonal } = useAccountStore();

@@ -5,7 +5,7 @@ import { organization } from "@/lib/auth.client";
 import { Building2, Plus } from "lucide-react";
 import Form from "next/form";
 import { useRouter } from "next/navigation";
-import { useState, type ChangeEvent } from "react";
+import { type ChangeEvent, useState } from "react";
 import { FileUpload } from "./file-upload";
 import { Submit } from "./submit";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";

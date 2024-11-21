@@ -1,11 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { UploadCloud } from "lucide-react";
 import type { ChangeEvent } from "react";
 import { useCallback, useState } from "react";
 import { Input } from "./ui/input";
 import { Progress } from "./ui/progress";
-import { UploadCloud } from "lucide-react";
 
 interface FileUploadProps {
 	className?: string;

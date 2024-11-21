@@ -28,6 +28,7 @@ export function SignInCard() {
 				{
 					email,
 					password,
+					callbackURL: "/account",
 				},
 				{
 					onError: (ctx) => {
@@ -37,7 +38,6 @@ export function SignInCard() {
 							variant: "destructive",
 						});
 					},
-					onSuccess: () => router.push("/account"),
 				},
 			);
 		} catch (error) {

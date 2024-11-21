@@ -29,6 +29,7 @@ export function SignUpCard() {
 					email,
 					password,
 					name,
+					callbackURL: "/auth/verify",
 				},
 				{
 					onError: (ctx) => {
@@ -38,7 +39,6 @@ export function SignUpCard() {
 							variant: "destructive",
 						});
 					},
-					onSuccess: () => router.push("/auth/verify"),
 				},
 			);
 		} catch (error) {
