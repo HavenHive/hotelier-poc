@@ -1,16 +1,22 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface AccountType {
-	isPersonal: boolean;
-	toggle: () => void;
+interface OrgType {
+	orgId: string | null;
+	isDefaultAccount: boolean;
+	toggle: (id?: string | null) => void;
 }
 
-export const useAccountStore = create<AccountType>()(
+export const useAccountStore = create<OrgType>()(
 	persist(
 		(set) => ({
-			isPersonal: true,
-			toggle: () => set((state) => ({ isPersonal: !state.isPersonal })),
+			orgId: null,
+			isDefaultAccount: true,
+			toggle: (id?: string | null) =>
+				set(() => ({
+					orgId: id || null,
+					isDefaultAccount: id === null,
+				})),
 		}),
 		{
 			name: "account-storage",

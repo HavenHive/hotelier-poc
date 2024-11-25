@@ -1,8 +1,5 @@
 "use client";
 
-import { ChevronsUpDown, Plus, UserRound } from "lucide-react";
-import { useEffect, useState } from "react";
-
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -25,12 +22,13 @@ import {
 	useListOrganizations,
 } from "@/lib/auth.client";
 import { useAccountStore } from "@/lib/store";
+import { ChevronsUpDown, Plus, UserRound } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { CreateOrg } from "./create-org";
 
 export function TeamSwitcher() {
-	const { toggle, isPersonal } = useAccountStore();
+	const { toggle, isDefaultAccount } = useAccountStore();
 	const { isMobile } = useSidebar();
 	const { data: organizations } = useListOrganizations();
 	const { data } = useActiveOrganization();
@@ -50,7 +48,7 @@ export function TeamSwitcher() {
 						});
 					},
 					onSuccess: () => {
-						toggle();
+						toggle(id);
 						toast({
 							title: "Organization switched successfully",
 						});
@@ -83,7 +81,7 @@ export function TeamSwitcher() {
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
 							<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-								{isPersonal ? (
+								{isDefaultAccount ? (
 									<UserRound className="size-4" />
 								) : data?.logo ? (
 									<Image
@@ -99,7 +97,7 @@ export function TeamSwitcher() {
 							</div>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-semibold">
-									{isPersonal ? personal.name : data?.name}
+									{isDefaultAccount ? personal.name : data?.name}
 								</span>
 							</div>
 							<ChevronsUpDown className="ml-auto" />
@@ -115,9 +113,16 @@ export function TeamSwitcher() {
 							Organizations
 						</DropdownMenuLabel>
 						<DropdownMenuItem
-							onClick={() => {
-								router.push("/account");
-								toggle();
+							onClick={async () => {
+								await organization.setActive(
+									{ organizationId: null },
+									{
+										onSuccess: () => {
+											toggle(null);
+											router.push("/account");
+										},
+									},
+								);
 							}}
 						>
 							<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">

@@ -110,7 +110,9 @@ export function NavUser() {
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem onClick={() => signOut()}>
+						<DropdownMenuItem
+							onClick={() => signOut().then(() => router.push("/auth"))}
+						>
 							<LogOut />
 							Log out
 						</DropdownMenuItem>

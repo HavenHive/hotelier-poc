@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
 				protocol: "https",
 				hostname: `${env.AWS_S3_BUCKET_NAME}.s3.${env.AWS_REGION}.amazonaws.com`,
 			},
+			{
+				protocol: "https",
+				hostname: "*.googleusercontent.com",
+			},
 		],
 	},
 };

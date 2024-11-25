@@ -50,9 +50,9 @@ export function Sessions() {
 			setLoading(false);
 		}
 	};
-	const endSession = async (id: string) => {
+	const endSession = async (token: string) => {
 		try {
-			const { error } = await revokeSession({ id });
+			const { error } = await revokeSession({ token });
 			if (error) {
 				toast({
 					title: "Something went wrong",
@@ -60,7 +60,9 @@ export function Sessions() {
 					variant: "destructive",
 				});
 			}
-			setSessions((prev) => (prev ? prev.filter((p) => p.id !== id) : null));
+			setSessions((prev) =>
+				prev ? prev.filter((p) => p.token !== token) : null,
+			);
 		} catch (error) {
 			console.error(error);
 			if (error) {
@@ -129,8 +131,8 @@ export function Sessions() {
 							<Laptop className="w-5 h-5" />
 						)}
 						<span className="text-xs text-muted-foreground">
-							IP: {s.ipAddress} • Expires at:{" "}
-							{new Date(s.expiresAt).toLocaleString()}
+							IP: {s.ipAddress} • Last signed in:{" "}
+							{new Date(s.updatedAt).toLocaleString()}
 						</span>
 						{s.id === auth.data?.session.id && <Badge>Current</Badge>}
 						{s.id !== auth.data?.session.id && (
@@ -150,7 +152,7 @@ export function Sessions() {
 									</AlertDialogHeader>
 									<AlertDialogFooter>
 										<AlertDialogCancel>Cancel</AlertDialogCancel>
-										<AlertDialogAction onClick={() => endSession(s.id)}>
+										<AlertDialogAction onClick={() => endSession(s.token)}>
 											End session
 										</AlertDialogAction>
 									</AlertDialogFooter>
