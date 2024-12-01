@@ -1,4 +1,5 @@
 import { emailOtpString } from "@/components/emails/email-otp";
+import { inviteUserString } from "@/components/emails/join-org";
 import { resetPasswordString } from "@/components/emails/password-reset";
 import { env } from "@/lib/env";
 import { createTransport } from "nodemailer";
@@ -18,7 +19,7 @@ export async function sendVerificationOTP(otp: string, email: string) {
 		const mail = await transporter.sendMail({
 			from: env.EMAIL_FROM,
 			to: email,
-			subject: "Sign in to Hotelier",
+			subject: "Your log in code for Hotelier",
 			html: body,
 		});
 		if (!mail) return { error: "Failed to send mail" };
@@ -39,7 +40,36 @@ export async function sendResetPassword(
 		const mail = await transporter.sendMail({
 			from: env.EMAIL_FROM,
 			to: email,
-			subject: "Reset your password",
+			subject: "Reset Your Hotelier Account Password",
+			html: body,
+		});
+		if (!mail) return { error: "Failed to send mail" };
+		return { success: true, message: "Email sent successfully" };
+	} catch (error) {
+		console.error(error);
+		return { error: "Internal server error" };
+	}
+}
+
+export async function sendInviteEmail(
+	inviterName: string,
+	inviteLink: string,
+	inviterEmail: string,
+	orgName: string,
+	invitedEmail: string,
+) {
+	try {
+		const body = await inviteUserString({
+			invitedEmail,
+			inviterName,
+			inviteLink,
+			inviterEmail,
+			orgName,
+		});
+		const mail = await transporter.sendMail({
+			from: env.EMAIL_FROM,
+			to: invitedEmail,
+			subject: `Join ${inviterName} on ${orgName}`,
 			html: body,
 		});
 		if (!mail) return { error: "Failed to send mail" };

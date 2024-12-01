@@ -1,4 +1,8 @@
-import { sendResetPassword, sendVerificationOTP } from "@/actions/mail";
+import {
+	sendInviteEmail,
+	sendResetPassword,
+	sendVerificationOTP,
+} from "@/actions/mail";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
@@ -17,7 +21,24 @@ export const auth = betterAuth({
 		},
 	},
 	plugins: [
-		organization(),
+		organization({
+			allowUserToCreateOrganization: async (user) => {
+				const dbUser = await prisma.user.findUnique({
+					where: { id: user.id },
+				});
+				return dbUser?.role === "owner";
+			},
+			async sendInvitationEmail(data, request) {
+				const inviteLink = `https://${process.env.VERCEL_URL}/invite/${data.id}`;
+				sendInviteEmail(
+					data.inviter.user.name,
+					inviteLink,
+					data.inviter.user.email,
+					data.organization.name,
+					data.email,
+				);
+			},
+		}),
 		admin(),
 		emailOTP({
 			async sendVerificationOTP({ email, otp }) {

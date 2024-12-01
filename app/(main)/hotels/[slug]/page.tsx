@@ -4,10 +4,18 @@ import {
 	BreadcrumbList,
 	BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@radix-ui/react-separator";
+import type { Metadata } from "next";
 
-export default function Page() {
+export const metadata: Metadata = {
+	title: "Organization",
+};
+
+export default async function Page({
+	params,
+}: { params: Promise<{ slug: string }> }) {
+	const slug = (await params).slug;
 	return (
 		<>
 			<header className="sticky top-0 backdrop-blur-sm flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
@@ -17,13 +25,13 @@ export default function Page() {
 					<Breadcrumb>
 						<BreadcrumbList>
 							<BreadcrumbItem>
-								<BreadcrumbPage>Notifications</BreadcrumbPage>
+								<BreadcrumbPage>Hotel Details</BreadcrumbPage>
 							</BreadcrumbItem>
 						</BreadcrumbList>
 					</Breadcrumb>
 				</div>
 			</header>
-			Notifications page for managing system wide and personal notifications
+			Your hotel slug is {slug}
 		</>
 	);
 }

@@ -1,8 +1,7 @@
 "use client";
 
-import { updateName } from "@/actions/account";
 import { useToast } from "@/hooks/use-toast";
-import { useSession } from "@/lib/auth.client";
+import { updateUser, useSession } from "@/lib/auth.client";
 import { Edit, Save } from "lucide-react";
 import Form from "next/form";
 import { useRouter } from "next/navigation";
@@ -19,21 +18,25 @@ export function EditName() {
 	const editName = async (form: FormData) => {
 		try {
 			const name = form.get("name") as string;
-			const { error, message } = await updateName(name);
-			if (error) {
-				toast({
-					title: "Something went wrong",
-					description: error,
-					variant: "destructive",
-				});
-				return;
-			}
-			toast({
-				title: "Success",
-				description: message,
-			});
-			setEdit(false);
-			router.refresh();
+			await updateUser(
+				{ name },
+				{
+					onSuccess: () => {
+						toast({
+							title: "Success",
+							description: "Name updated successfully",
+						});
+						router.refresh();
+					},
+					onError: (ctx) => {
+						toast({
+							title: "Something went wrong",
+							description: ctx.error.message,
+							variant: "destructive",
+						});
+					},
+				},
+			);
 		} catch (error) {
 			console.error(error);
 			toast({

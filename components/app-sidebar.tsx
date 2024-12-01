@@ -1,21 +1,10 @@
 "use client";
 
-import {
-	AudioWaveform,
-	BookOpen,
-	Bot,
-	Command,
-	Frame,
-	GalleryVerticalEnd,
-	MapIcon,
-	PieChart,
-	Settings2,
-	SquareTerminal,
-} from "lucide-react";
+import { getRoutes } from "@/lib/constants";
+import { useParams } from "next/navigation";
 import type * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
@@ -25,149 +14,56 @@ import {
 	SidebarHeader,
 	SidebarRail,
 } from "@/components/ui/sidebar";
-
-// This is sample data.
-const data = {
-	user: {
-		name: "shadcn",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
-	},
-	teams: [
-		{
-			name: "Acme Inc",
-			logo: GalleryVerticalEnd,
-			plan: "Enterprise",
-		},
-		{
-			name: "Acme Corp.",
-			logo: AudioWaveform,
-			plan: "Startup",
-		},
-		{
-			name: "Evil Corp.",
-			logo: Command,
-			plan: "Free",
-		},
-	],
-	navMain: [
-		{
-			title: "Playground",
-			url: "#",
-			icon: SquareTerminal,
-			isActive: true,
-			items: [
-				{
-					title: "History",
-					url: "#",
-				},
-				{
-					title: "Starred",
-					url: "#",
-				},
-				{
-					title: "Settings",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Models",
-			url: "#",
-			icon: Bot,
-			items: [
-				{
-					title: "Genesis",
-					url: "#",
-				},
-				{
-					title: "Explorer",
-					url: "#",
-				},
-				{
-					title: "Quantum",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Documentation",
-			url: "#",
-			icon: BookOpen,
-			items: [
-				{
-					title: "Introduction",
-					url: "#",
-				},
-				{
-					title: "Get Started",
-					url: "#",
-				},
-				{
-					title: "Tutorials",
-					url: "#",
-				},
-				{
-					title: "Changelog",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Settings",
-			url: "#",
-			icon: Settings2,
-			items: [
-				{
-					title: "General",
-					url: "#",
-				},
-				{
-					title: "Team",
-					url: "#",
-				},
-				{
-					title: "Billing",
-					url: "#",
-				},
-				{
-					title: "Limits",
-					url: "#",
-				},
-			],
-		},
-	],
-	projects: [
-		{
-			name: "Design Engineering",
-			url: "#",
-			icon: Frame,
-		},
-		{
-			name: "Sales & Marketing",
-			url: "#",
-			icon: PieChart,
-		},
-		{
-			name: "Travel",
-			url: "#",
-			icon: MapIcon,
-		},
-	],
-};
+import { useSession } from "@/lib/auth.client";
+import { Skeleton } from "./ui/skeleton";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const auth = useSession();
+	const { isPending, data } = auth;
+	const params = useParams();
+	const slug = params?.slug as string | undefined;
+	if (isPending) {
+		<SidebarSkeleton />;
+	}
+	const role = data?.user?.role as "owner" | "admin" | "member" | "user";
+	const routes = getRoutes(role, slug);
 	return (
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader>
 				<TeamSwitcher />
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain items={data.navMain} />
-				<NavProjects projects={data.projects} />
+				<NavMain items={routes.navMain} />
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser />
+			</SidebarFooter>
+			<SidebarRail />
+		</Sidebar>
+	);
+}
+
+function SidebarSkeleton({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	return (
+		<Sidebar collapsible="icon" {...props}>
+			<SidebarHeader>
+				<Skeleton className="h-10 w-full" />
+			</SidebarHeader>
+			<SidebarContent>
+				<div className="space-y-4 p-4">
+					<Skeleton className="h-4 w-3/4" />
+					<Skeleton className="h-4 w-1/2" />
+					<Skeleton className="h-4 w-2/3" />
+					<Skeleton className="h-4 w-3/5" />
+				</div>
+				<div className="mt-6 space-y-4 p-4">
+					<Skeleton className="h-4 w-2/3" />
+					<Skeleton className="h-4 w-1/2" />
+					<Skeleton className="h-4 w-3/4" />
+				</div>
+			</SidebarContent>
+			<SidebarFooter>
+				<Skeleton className="h-10 w-full" />
 			</SidebarFooter>
 			<SidebarRail />
 		</Sidebar>

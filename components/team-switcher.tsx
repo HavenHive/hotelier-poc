@@ -47,12 +47,12 @@ export function TeamSwitcher() {
 							variant: "destructive",
 						});
 					},
-					onSuccess: () => {
+					onSuccess: (ctx) => {
 						toggle(id);
 						toast({
 							title: "Organization switched successfully",
 						});
-						router.push(`/org/${id}`);
+						router.push(`/hotels/${ctx.data?.slug}`);
 					},
 				},
 			);

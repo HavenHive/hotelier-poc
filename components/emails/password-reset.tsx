@@ -11,14 +11,16 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-export const ResetPasswordEmail = ({
-	userName,
-	inviteLink,
-}: { userName: string; inviteLink: string }) => {
+export interface ResetPassword {
+	userName: string;
+	inviteLink: string;
+}
+
+export const ResetPasswordEmail = ({ userName, inviteLink }: ResetPassword) => {
 	return (
 		<Html>
 			<Head />
-			<Preview>Hotelier reset your password</Preview>
+			<Preview>Reset Your Hotelier Account Password</Preview>
 			<Body style={main}>
 				<Container style={container}>
 					<Section>
@@ -48,7 +50,7 @@ export const ResetPasswordEmail = ({
 export const resetPasswordString = async ({
 	userName,
 	inviteLink,
-}: { userName: string; inviteLink: string }) => {
+}: ResetPassword) => {
 	const html = await render(
 		<ResetPasswordEmail userName={userName} inviteLink={inviteLink} />,
 	);

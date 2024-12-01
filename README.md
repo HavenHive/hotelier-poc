@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hotel Management System
 
-## Getting Started
+A comprehensive software solution for hotel owners to manage their properties, employees, and operations efficiently.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Hotel Management
+- **Hotel Registration**: Complete hotel profile management
+   - Hotel name and branding (logo)
+   - Contact information
+   - Physical address (street, city, country, zip code)
+   - Website URL
+   - Property details (floor count, description)
+   - Custom metadata
+   - Unique slug for identification
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Room Management
+- **Room Configuration**
+   - Unique room identification (room number/ID)
+   - Real-time availability tracking
+   - Room type classification
+   - Pricing structure
+   - Amenity features:
+     - Pet-friendly options
+     - Smoking/Non-smoking
+     - Additional custom features
+     - Dynamic pricing based on features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### User Roles & Permissions
+1. **Owner**
+    - Full system access
+    - Financial overview
+    - Strategic management
+    - Employee management
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Admin**
+    - System configuration
+    - Operational management
+    - Staff supervision
 
-## Learn More
+3. **Staff Member**
+    - Room availability updates
+    - Guest services
+    - Basic operations
 
-To learn more about Next.js, take a look at the following resources:
+## System Workflow
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Initial Setup
+1. Hotel owner registers property
+2. System generates initial credentials
+3. Mandatory password change on first login
+4. Hotel profile completion
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### User Management
+1. Owner can:
+    - Add employees
+    - Assign roles
+    - Configure services
+    - Manage room inventory
+    - Set pricing and discounts
+    - Access financial reports
 
-## Deploy on Vercel
+2. Employee Onboarding:
+    - Automatic account creation for key departments (HR, Admin, IT)
+    - First-time login security setup
+    - Security question configuration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Operational Features
+- **Booking Management**
+   - Real-time availability updates
+   - Check-in/check-out processing
+   - Duration-based pricing
+   - Service cost aggregation
+   - Automated discount application
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Financial Tracking**
+   - Automated revenue calculation
+   - Checkout payment processing
+   - Gross revenue updates
+   - Owner-exclusive financial reporting
+
+- **Room Status Management**
+   - Dynamic availability tracking
+   - Rate configuration by authorized personnel
+   - Room type management
+
+### Security Features
+- Password reset functionality
+- Multi-level authentication
+- Role-based access control
+- Security question verification
+
+## System Objectives
+1. Implement automated hospitality management using industry best practices
+2. Ensure robust data verification and validation
+3. Maintain accurate and up-to-date record keeping
+4. Streamline hotel operations and guest services
+
+## Technical Implementation
+- Secure user authentication
+- Real-time data synchronization
+- Automated backup systems
+- Scalable architecture
+- User-friendly interface

@@ -2,6 +2,7 @@ import { ThemeProvider } from "@/components/providers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistMono = localFont({
 	src: "../assets/fonts/GeistMonoVF.woff",
@@ -28,6 +29,7 @@ export default function RootLayout({
 					enableSystem
 				>
 					{children}
+					<Toaster />
 				</ThemeProvider>
 			</body>
 		</html>

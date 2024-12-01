@@ -1,6 +1,6 @@
 export default async function Page({
 	params,
 }: { params: Promise<{ id: string }> }) {
-	const id = (await params).id;
-	return <>Organization id is {id}</>;
+	const { id } = await params;
+	return <>{id}</>;
 }

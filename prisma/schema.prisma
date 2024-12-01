@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,32 +10,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+enum userRole {
+  admin
+  member
+  owner
+  user
+}
+
+enum roomType {
+  STANDARD
+  DELUXE
+  SUITE
+  PRESIDENTIAL
+}
+
+enum invitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+model user {
   id            String       @id @default(cuid())
   email         String       @unique
   name          String?
   emailVerified Boolean
   image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  role          String?
-  banned        Boolean?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  role          userRole     @default(user)
+  banned        Boolean      @default(false)
   banReason     String?
   banExpires    DateTime?
-  Invitation    Invitation[]
-  Session       Session[]
-  Account       Account[]
+  invitation    invitation[]
+  session       session[]
+  account       account[]
 
   @@map("user")
 }
 
-model Session {
+model session {
   id                   String   @id
   expiresAt            DateTime
   ipAddress            String?
   userAgent            String?
   userId               String
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 user     @relation(fields: [userId], references: [id], onDelete: Cascade)
   activeOrganizationId String?
   impersonatedBy       String?
 
@@ -50,12 +68,12 @@ model Session {
   @@map("session")
 }
 
-model Account {
+model account {
   id           String    @id
   accountId    String
   providerId   String
   userId       String
-  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         user      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken  String?
   refreshToken String?
   idToken      String?
@@ -71,7 +89,7 @@ model Account {
   @@map("account")
 }
 
-model Verification {
+model verification {
   id         String   @id
   identifier String
   value      String
@@ -83,41 +101,59 @@ model Verification {
   @@map("verification")
 }
 
-model Organization {
-  id         String       @id @default(cuid())
-  name       String
-  slug       String?
-  logo       String?
-  createdAt  DateTime
-  metadata   String?
-  Invitation Invitation[]
-  Member     Member[]
+model room {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  roomNumber     String
+  type           roomType
+  price          Float
+  available      Boolean      @default(true)
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
-  @@unique([slug])
-  @@map("organization")
+  @@unique([organizationId, roomNumber])
+  @@map("room")
 }
 
-model Member {
+model member {
   id             String       @id
   organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userId         String
-  role           String
-  createdAt      DateTime
+  role           userRole
+  createdAt      DateTime     @default(now())
 
   @@map("member")
 }
 
-model Invitation {
-  id             String       @id
+model invitation {
+  id             String           @id
   organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   email          String
-  role           String?
-  status         String
+  role           userRole?
+  status         invitationStatus
   expiresAt      DateTime
   inviterId      String
-  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+  user           user             @relation(fields: [inviterId], references: [id], onDelete: Cascade)
 
   @@map("invitation")
+}
+
+model organization {
+  id         String       @id
+  name       String
+  slug       String?
+  logo       String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  metadata   Json?
+  invitation invitation[]
+  room       room[]
+  member     member[]
+
+  @@unique([slug])
+  @@map("organization")
 }

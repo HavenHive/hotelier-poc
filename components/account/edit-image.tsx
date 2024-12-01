@@ -1,8 +1,8 @@
 "use client";
 
-import { updateAvatar } from "@/actions/account";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "@/lib/auth.client";
+import { updateUser } from "@/lib/auth.client";
 import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -35,19 +35,25 @@ export function EditAvatar() {
 						onSuccess={async (url) => {
 							setUploading(true);
 							try {
-								const { error, message } = await updateAvatar(url);
-								if (error) {
-									toast({
-										title: "Something went wrong",
-										description: error,
-										variant: "destructive",
-									});
-								}
-								toast({
-									title: "Upload successful",
-									description: message,
-								});
-								router.refresh();
+								await updateUser(
+									{ image: url },
+									{
+										onSuccess: () => {
+											toast({
+												title: "Upload successful",
+												description: "Profile image updated successfully",
+											});
+											router.refresh();
+										},
+										onError: (ctx) => {
+											toast({
+												title: "Something went wrong",
+												description: ctx.error.message,
+												variant: "destructive",
+											});
+										},
+									},
+								);
 							} catch (error) {
 								console.error(error);
 								toast({
