@@ -16,8 +16,8 @@ import {
 export const getRoutes = (role: string, slug?: string) => ({
 	navMain: [
 		{
-			title: "Dashboard",
-			url: "/dashboard",
+			title: "Home",
+			url: "/",
 			icon: Home,
 		},
 		{
