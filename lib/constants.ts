@@ -6,6 +6,7 @@ import {
 	CreditCard,
 	FileChartPie,
 	Home,
+	Mailbox,
 	Settings2,
 	SquareKanban,
 	Users,
@@ -46,6 +47,11 @@ export const getRoutes = (role: string, slug?: string) => ({
 							icon: UsersRound,
 						},
 						{
+							title: "Invites",
+							url: `/hotels/${slug}/invites`,
+							icon: Mailbox,
+						},
+						{
 							title: "Reports",
 							url: `/hotels/${slug}/report`,
 							icon: FileChartPie,
@@ -83,3 +89,10 @@ export const getRoutes = (role: string, slug?: string) => ({
 			: []),
 	],
 });
+
+export const reverseSlug = (slug: string) => {
+	return slug
+		.split("-")
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(" ");
+};

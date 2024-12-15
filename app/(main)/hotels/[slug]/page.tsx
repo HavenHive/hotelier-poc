@@ -1,21 +1,26 @@
 import {
 	Breadcrumb,
 	BreadcrumbItem,
+	BreadcrumbLink,
 	BreadcrumbList,
 	BreadcrumbPage,
+	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
+import { reverseSlug } from "@/lib/constants";
 
 export const metadata: Metadata = {
-	title: "Organization",
+	title: "Hotel",
 };
 
 export default async function Page({
 	params,
 }: { params: Promise<{ slug: string }> }) {
 	const slug = (await params).slug;
+	const title = reverseSlug(slug);
+
 	return (
 		<>
 			<header className="sticky top-0 backdrop-blur-sm flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
@@ -24,14 +29,20 @@ export default async function Page({
 					<Separator orientation="vertical" className="mr-2 h-4" />
 					<Breadcrumb>
 						<BreadcrumbList>
+							<BreadcrumbItem className="hidden md:block">
+								<BreadcrumbLink href="/hotels">Hotels</BreadcrumbLink>
+							</BreadcrumbItem>
+							<BreadcrumbSeparator className="hidden md:block" />
 							<BreadcrumbItem>
-								<BreadcrumbPage>Hotel Details</BreadcrumbPage>
+								<BreadcrumbPage>{title}</BreadcrumbPage>
 							</BreadcrumbItem>
 						</BreadcrumbList>
 					</Breadcrumb>
 				</div>
 			</header>
-			Your hotel slug is {slug}
+			<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+				Your hotel name is {title}
+			</div>
 		</>
 	);
 }
